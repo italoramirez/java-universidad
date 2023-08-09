@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  java_app:
+    container_name: java_app
+    image: pee-java-app:1.0.0
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - DATABASE_URL=jdbc:postgresql://java_db:5432/postgres
+      - DATABASE_USERNAME=posgress
+      - DATABASE_PASSWORD=posgress
+    depends_on:
+      - java_db
+
+  java_db:
+    container_name: java_db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - POSTGRES_USER=posgress
+      - POSTGRES_PASSWORD=posgress
+      - DATABASE_DB=posgress
