@@ -17,18 +17,18 @@ public class Pabellon implements Serializable {
     private String nombre;
     private Direccion direccion;
     private LocalDate fechaAlta;
-    private LocalDate ultimaModificacion;
+    private LocalDate fechaModificacion;
 
     public Pabellon() {
     }
 
-    public Pabellon(Integer id, Double mts2, String nombre, Direccion direccion, LocalDate fechaAlta, LocalDate ultimaModificacion) {
+    public Pabellon(Integer id, Double mts2, String nombre, Direccion direccion, LocalDate fechaAlta, LocalDate fechaModificacion) {
         this.id = id;
         this.mts2 = mts2;
         this.nombre = nombre;
         this.direccion = direccion;
         this.fechaAlta = fechaAlta;
-        this.ultimaModificacion = ultimaModificacion;
+        this.fechaModificacion = fechaModificacion;
     }
 
     public Integer getId() {
@@ -71,12 +71,12 @@ public class Pabellon implements Serializable {
         this.fechaAlta = fechaAlta;
     }
 
-    public LocalDate getUltimaModificacion() {
-        return ultimaModificacion;
+    public LocalDate getFechaModificacion() {
+        return fechaModificacion;
     }
 
-    public void setUltimaModificacion(LocalDate ultimaModificacion) {
-        this.ultimaModificacion = ultimaModificacion;
+    public void setFechaModificacion(LocalDate fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class Pabellon implements Serializable {
                 ", nombre='" + nombre + '\'' +
                 ", direccion=" + direccion +
                 ", fechaAlta=" + fechaAlta +
-                ", ultimaModificacion=" + ultimaModificacion +
+                ", ultimaModificacion=" + fechaModificacion +
                 '}';
     }
 
