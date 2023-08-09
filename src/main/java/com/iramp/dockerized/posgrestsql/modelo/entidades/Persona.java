@@ -1,17 +1,34 @@
 package com.iramp.dockerized.posgrestsql.modelo.entidades;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
+@Table(name = "personas")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Persona implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false, length = 60)
     private String nombre;
+    @Column(nullable = false, length = 60)
     private String apellido;
+    @Column(nullable = false, length = 10, unique = true)
     private String dni;
+    @Column(name = "fecha_alta")
     private LocalDate fechaAlta;
+    @Column(name = "fecha_modificaion")
     private LocalDate fechaModificacion;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "codigo_postal", column = @Column(name = "codigo_postal")),
+            @AttributeOverride(name = "dpto", column = @Column(name = "departamento"))
+    })
     private Direccion direccion;
 
     public Persona() {
@@ -79,6 +96,15 @@ public abstract class Persona implements Serializable {
 
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
+    }
+    @PrePersist
+    private void antesDePersistir() {
+        this.fechaAlta = LocalDate.now();
+    }
+
+    @PreUpdate
+    private void antesDeUpdate() {
+        this.fechaModificacion = LocalDate.now();
     }
 
     @Override

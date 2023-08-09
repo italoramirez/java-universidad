@@ -1,28 +1,51 @@
 package com.iramp.dockerized.posgrestsql.modelo.entidades;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
+import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Set;
+
+@Entity
+@Table(name = "carreras")
 public class Carrera implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(unique = false, nullable = false, length = 80)
     private String nombre;
+    @Column(name = "cantidad_materias")
     private Integer cantidadMaterias;
+    @Column(name = "cantidad_anios")
     private Integer cantidadAnios;
-    private LocalDate fechaAlta;
-    private LocalDate fechaMofificacion;
+    @Column(name = "fehca_alta")
+    private LocalDateTime fechaAlta;
+    @Column(name = "fecha_modificacion")
+    private LocalDateTime fechaModificacion;
+
+    @OneToMany(
+            mappedBy = "carrera",
+            fetch = FetchType.LAZY
+    )
+    private Set<Alumno> alumnos;
+    @ManyToMany(
+            mappedBy = "carreras",
+            fetch = FetchType.LAZY
+    )
+    private Set<Profesor> profesores;
 
     public Carrera() {
     }
 
-    public Carrera(Integer id, String nombre, Integer cantidadMaterias, Integer cantidadAnios, LocalDate fechaAlta, LocalDate fechaMofificacion) {
+    public Carrera(Integer id, String nombre, Integer cantidadMaterias, Integer cantidadAnios, LocalDateTime fechaAlta, LocalDateTime fechaModificacion) {
         this.id = id;
         this.nombre = nombre;
         this.cantidadMaterias = cantidadMaterias;
         this.cantidadAnios = cantidadAnios;
         this.fechaAlta = fechaAlta;
-        this.fechaMofificacion = fechaMofificacion;
+        this.fechaModificacion = fechaModificacion;
     }
 
     public Integer getId() {
@@ -57,20 +80,46 @@ public class Carrera implements Serializable {
         this.cantidadAnios = cantidadAnios;
     }
 
-    public LocalDate getFechaAlta() {
+    public LocalDateTime getFechaAlta() {
         return fechaAlta;
     }
 
-    public void setFechaAlta(LocalDate fechaAlta) {
+    public void setFechaAlta(LocalDateTime fechaAlta) {
         this.fechaAlta = fechaAlta;
     }
 
-    public LocalDate getFechaMofificacion() {
-        return fechaMofificacion;
+    public LocalDateTime getFechaModificacion() {
+        return fechaModificacion;
     }
 
-    public void setFechaMofificacion(LocalDate fechaMofificacion) {
-        this.fechaMofificacion = fechaMofificacion;
+    public void setFechaModificacion(LocalDateTime fechaMofificacion) {
+        this.fechaModificacion = fechaMofificacion;
+    }
+
+    @PrePersist
+    private void antesDePersistir() {
+        this.fechaAlta = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void antesDeUpdate() {
+        this.fechaModificacion = LocalDateTime.now();
+    }
+
+    public Set<Alumno> getAlumnos() {
+        return alumnos;
+    }
+
+    public void setAlumnos(Set<Alumno> alumnos) {
+        this.alumnos = alumnos;
+    }
+
+    public Set<Profesor> getProfesores() {
+        return profesores;
+    }
+
+    public void setProfesors(Set<Profesor> profesores) {
+        this.profesores = profesores;
     }
 
     @Override
@@ -81,7 +130,7 @@ public class Carrera implements Serializable {
                 ", cantidadMaterias=" + cantidadMaterias +
                 ", cantidadAnios=" + cantidadAnios +
                 ", fechaAlta=" + fechaAlta +
-                ", fechaMofificacion=" + fechaMofificacion +
+                ", fechaMofificacion=" + fechaModificacion +
                 '}';
     }
 
